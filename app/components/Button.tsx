@@ -10,21 +10,19 @@ import {
   ViewStyle,
 } from 'react-native';
 type Props = {
-  textStye?: StyleProp<TextStyle>;
+  textStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   onPress?: (event: GestureResponderEvent) => void;
 };
 const Button = (props: PropsWithChildren<Props>) => {
-  const { containerStyle, textStye, children, onPress } = props;
+  const { containerStyle, textStyle, children, onPress } = props;
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-        <View style={[styles.initialButtonContainer, containerStyle]}>
-          <Text style={[styles.initialText, textStye]}>{children}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+      <View style={[styles.initialButtonContainer, containerStyle]}>
+        <Text style={[styles.initialText, textStyle]}>{children}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -33,8 +31,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   initialButtonContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
     borderRadius: 5,
     backgroundColor: 'red',
   },

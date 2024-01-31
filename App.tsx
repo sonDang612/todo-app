@@ -14,7 +14,7 @@ const App = () => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName={screenNames.HomeScreen}
-        screenOptions={{ animation: 'ios' }}>
+        screenOptions={{ animation: 'ios', headerShown: false }}>
         {routes.map((route, index) => (
           <Stack.Screen {...route} key={index} />
         ))}
