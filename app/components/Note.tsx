@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Button from './Button';
 import { UserNote } from '../types';
@@ -11,24 +11,30 @@ type Props = {
 const Note = (props: Props) => {
   const { userNote, deleteNote } = props;
   return (
-    <View style={styles.container}>
-      <Text>{userNote.title}</Text>
-      <View style={styles.taskManagementContainer}>
-        <Button
-          containerStyle={styles.editButton}
-          textStyle={styles.editButtonText}
-          onPress={() =>
-            navigate(screenNames.AddNoteDetailsScreen, { userNote })
-          }>
-          Edit
-        </Button>
-        <Button
-          containerStyle={styles.deleteButton}
-          onPress={() => deleteNote(userNote.id)}>
-          Delete
-        </Button>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={() =>
+        navigate(screenNames.AddNoteDetailsScreen, { userNote, isViewed: true })
+      }>
+      <View style={styles.container}>
+        <Text>{userNote.title}</Text>
+        <View style={styles.taskManagementContainer}>
+          <Button
+            containerStyle={styles.editButton}
+            textStyle={styles.editButtonText}
+            onPress={() =>
+              navigate(screenNames.AddNoteDetailsScreen, { userNote })
+            }>
+            Edit
+          </Button>
+          <Button
+            containerStyle={styles.deleteButton}
+            onPress={() => deleteNote(userNote.id)}>
+            Delete
+          </Button>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

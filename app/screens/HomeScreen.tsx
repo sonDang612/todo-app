@@ -21,7 +21,10 @@ const HomeScreen = () => {
   const addNote = () => {
     if (title) {
       const id = uuid.v1().toString();
-      setUserNotes(prev => [...prev, { id, title, description: title }]);
+      setUserNotes(prev => [
+        { id, title, description: '', galleryItems: [] },
+        ...prev,
+      ]);
       setTitle(undefined);
       textInputRef.current?.blur();
     } else {
@@ -47,7 +50,6 @@ const HomeScreen = () => {
       );
     }
   }, [isFocused, params?.updatedUserNote]);
-
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>

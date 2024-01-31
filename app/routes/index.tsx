@@ -19,7 +19,12 @@ const modalRoutes: Route[] = [
   {
     component: GalleryScreen,
     name: screenNames.GalleryScreen,
-    options: { animation: 'ios', headerShown: true },
+    options: {
+      animation: 'ios',
+      headerShown: true,
+      title: 'Gallery',
+      headerTitleAlign: 'center',
+    },
   },
 ];
 
