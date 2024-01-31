@@ -4,8 +4,8 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import routes from './app/routes';
 import screenNames from './app/routes/screenNames';
+import { modalRoutes, routes } from './app/routes';
 const Stack = createNativeStackNavigator();
 export const navigationRef = createNavigationContainerRef();
 
@@ -15,9 +15,19 @@ const App = () => {
       <Stack.Navigator
         initialRouteName={screenNames.HomeScreen}
         screenOptions={{ animation: 'ios', headerShown: false }}>
-        {routes.map((route, index) => (
-          <Stack.Screen {...route} key={index} />
+        {routes.map(route => (
+          <Stack.Screen {...route} key={route.name} />
         ))}
+
+        <Stack.Group
+          screenOptions={{
+            presentation: 'transparentModal',
+            animation: 'slide_from_bottom',
+          }}>
+          {modalRoutes.map(route => (
+            <Stack.Screen {...route} key={route.name} />
+          ))}
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );

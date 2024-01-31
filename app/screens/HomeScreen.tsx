@@ -1,10 +1,53 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import LineSpacer from '../components/LineSpacer';
+import uuid from 'react-native-uuid';
 import Button from '../components/Button';
-import Note from '../components/Note';
+import LineSpacer from '../components/LineSpacer';
+import ListNotes from '../components/ListNotes';
+import { UserNote } from '../types';
+import { useIsFocused, useRoute } from '@react-navigation/native';
+type Params = {
+  updatedUserNote?: UserNote;
+};
 
 const HomeScreen = () => {
+  const params = useRoute().params as Params;
+  const isFocused = useIsFocused();
+
+  const [title, setTitle] = React.useState<string | undefined>(undefined);
+  const [userNotes, setUserNotes] = React.useState<UserNote[]>([]);
+  const textInputRef = React.useRef<TextInput | null>(null);
+
+  const addNote = () => {
+    if (title) {
+      const id = uuid.v1().toString();
+      setUserNotes(prev => [...prev, { id, title, description: title }]);
+      setTitle(undefined);
+      textInputRef.current?.blur();
+    } else {
+      console.log('error');
+    }
+  };
+
+  const deleteAll = () => {
+    setUserNotes([]);
+  };
+
+  const deleteNote = React.useCallback((deletedNoteId: string) => {
+    setUserNotes(prev => prev.filter(item => item.id !== deletedNoteId));
+  }, []);
+
+  React.useEffect(() => {
+    if (isFocused && params?.updatedUserNote) {
+      const updatedUserNote = params.updatedUserNote;
+      setUserNotes(prev =>
+        prev.map(item =>
+          item.id === updatedUserNote.id ? updatedUserNote : item,
+        ),
+      );
+    }
+  }, [isFocused, params?.updatedUserNote]);
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -13,12 +56,21 @@ const HomeScreen = () => {
       <LineSpacer backgroundColor="#BDBDBD" />
       <View style={styles.textInputContainer}>
         <TextInput
+          ref={textInputRef}
           placeholder="add title for task..."
           style={styles.textInput}
+          onChangeText={setTitle}
+          value={title}
         />
-        <Button containerStyle={styles.addButton}>Add</Button>
+        <Button containerStyle={styles.addButton} onPress={addNote}>
+          Add
+        </Button>
+        <Button containerStyle={styles.deleteButton} onPress={deleteAll}>
+          Delete All
+        </Button>
       </View>
-      <Note />
+
+      <ListNotes deleteNote={deleteNote} userNotes={userNotes} />
     </View>
   );
 };
@@ -56,6 +108,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#000',
+  },
+  deleteButton: {
+    flex: 1,
+    paddingHorizontal: 10,
+    marginLeft: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'red',
   },
 });
 

@@ -1,18 +1,32 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import Button from './Button';
-
-const Note = () => {
+import { UserNote } from '../types';
+import navigate from '../utils/navigate';
+import screenNames from '../routes/screenNames';
+type Props = {
+  userNote: UserNote;
+  deleteNote: (deletedNoteId: string) => void;
+};
+const Note = (props: Props) => {
+  const { userNote, deleteNote } = props;
   return (
     <View style={styles.container}>
-      <Text>Task 1</Text>
+      <Text>{userNote.title}</Text>
       <View style={styles.taskManagementContainer}>
         <Button
           containerStyle={styles.editButton}
-          textStyle={styles.editButtonText}>
+          textStyle={styles.editButtonText}
+          onPress={() =>
+            navigate(screenNames.AddNoteDetailsScreen, { userNote })
+          }>
           Edit
         </Button>
-        <Button containerStyle={styles.deleteButton}>Delete</Button>
+        <Button
+          containerStyle={styles.deleteButton}
+          onPress={() => deleteNote(userNote.id)}>
+          Delete
+        </Button>
       </View>
     </View>
   );
@@ -26,6 +40,8 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
   },
   taskManagementContainer: {
     flexDirection: 'row',
@@ -45,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Note;
+export default React.memo(Note);
