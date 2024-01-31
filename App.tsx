@@ -1,11 +1,25 @@
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View} from 'react-native';
+import routes from './app/routes';
+import screenNames from './app/routes/screenNames';
+const Stack = createNativeStackNavigator();
+export const navigationRef = createNavigationContainerRef();
 
 const App = () => {
   return (
-    <View>
-      <Text>Hello World from Dev</Text>
-    </View>
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator
+        initialRouteName={screenNames.HomeScreen}
+        screenOptions={{ animation: 'ios' }}>
+        {routes.map((route, index) => (
+          <Stack.Screen {...route} key={index} />
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
